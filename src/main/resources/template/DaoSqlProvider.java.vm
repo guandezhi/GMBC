@@ -1,0 +1,60 @@
+package ${package}.${moduleName}.dao.provider;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.jdbc.SQL;
+
+import ${package}.${moduleName}.entity.${className}Entity;
+import ${package}.${moduleName}.model.${className}Model;
+
+/**
+ * ${comments}
+ * 
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+public class ${className}SqlProvider{
+	public String save(${className}Entity record) {
+		SQL sql = new SQL();
+		sql.INSERT_INTO("${tableName}");
+		#foreach($column in $columns)
+		#if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')
+		
+		sql.VALUES("$column.columnName", "#{$column.attrname}");
+		#end			
+		#end
+		
+		return sql.toString();
+	}
+
+	public String queryList(${className}Model tm) {
+		SQL sql = new SQL();
+		sql.SELECT("*");
+		sql.FROM("${tableName}");
+		if (StringUtils.isNotBlank(tm.getSidx())) {
+			sql.ORDER_BY(tm.getSidx() + " " + tm.getSord());
+		}
+		StringBuilder result = new StringBuilder(sql.toString());
+		result.append(" limit ").append(tm.getOffset()).append(",").append(tm.getRows());
+		return result.toString();
+	}
+
+	public String update(${className}Entity record) {
+		SQL sql = new SQL();
+		sql.UPDATE("${tableName}");
+		#foreach($column in $columns)
+		#if($column.columnName != $pk.columnName)
+			#set( $end=$column.attrname.length() )##计算属性的长度
+       		#set( $str=$column.attrname.substring( 1 ,$end ) )
+       		#set( $start = $column.attrname.substring(0,1).toUpperCase() )##首字母大写 
+		
+		if (record.get$start$str() != null) {
+			sql.SET("$column.columnName = #{$column.attrname}");
+		}
+		#end
+		#end
+		
+		sql.WHERE("id = #{id}");
+		return sql.toString();
+	}
+}

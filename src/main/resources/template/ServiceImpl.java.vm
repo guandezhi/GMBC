@@ -1,0 +1,54 @@
+package ${package}.${moduleName}.service.impl;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import ${package}.${moduleName}.dao.${className}Dao;
+import ${package}.${moduleName}.entity.${className}Entity;
+import ${package}.${moduleName}.model.${className}Model;
+import ${package}.${moduleName}.service.${className}Service;
+
+
+
+@Service("${classname}Service")
+public class ${className}ServiceImpl implements ${className}Service {
+	@Autowired
+	private ${className}Dao ${classname}Dao;
+	
+	@Override
+	public ${className}Entity queryObject(${pk.attrType} ${pk.attrname}){
+		return ${classname}Dao.queryObject(${pk.attrname});
+	}
+	
+	@Override
+	public List<${className}Entity> queryList(${className}Model tm){
+		return ${classname}Dao.queryList(tm);
+	}
+	
+	@Override
+	public int queryTotal(){
+		return ${classname}Dao.queryTotal();
+	}
+	
+	@Override
+	@Transactional
+	public void save(${className}Entity ${classname}){
+		${classname}Dao.save(${classname});
+	}
+	
+	@Override
+	@Transactional
+	public void update(${className}Entity ${classname}){
+		${classname}Dao.update(${classname});
+	}
+	
+	@Override
+	@Transactional
+	public void delete(List<${pk.attrType}> ${pk.attrname}s){
+		${classname}Dao.delete(StringUtils.join(${pk.attrname}s,","));
+	}
+}
